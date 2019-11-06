@@ -4,27 +4,98 @@
 	<meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title></title>
-	<link rel="icon" href="img/Fevicon.png" type="image/png">
+  <title>Have a Good Meal</title>
+	<link rel="icon" href="img/logoHGM.png" type="image/png">
   
   	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   
-  <!-- template -->
-  	<link rel="stylesheet" href="vendors/bootstrap/bootstrap.min.css">
-  	<link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
-  	<link rel="stylesheet" href="vendors/themify-icons/themify-icons.css">
-  	<link rel="stylesheet" href="vendors/linericon/style.css">
-  	<link rel="stylesheet" href="vendors/owl-carousel/owl.theme.default.min.css">
-  	<link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
-  	<link rel="stylesheet" href="css/magnific-popup.css">
-  	<link rel="stylesheet" href="vendors/flat-icon/font/flaticon.css">
-  	<link rel="canonical" href="https://getbootstrap.com/docs/4.1/examples/album/">
-  
   <!-- Custom styles for Album template -->
-  	<link href="css/album.css" rel="stylesheet">
-  	<link rel="stylesheet" href="css/style.css">
+  	<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-	
+	<div class="container">
+    <!--bannière logo start-->
+      <div class="header text-center">
+        <img class="logo" src="img/logoHGM.png" alt="Have a Good Meal logo" width="10%">
+        <h1> <span class="motTitreVert">Have a</span> <span class="motTitreOrange">Good</span> <span class="motTitreVert">Meal</span></h1>
+      </div>
+      <!--bannière logo end-->
+
+    <div class="row">
+    <div class="col-6-sm listeResto">
+        <!--filtre start-->
+        <div class="filter">
+          <h4>Quel type de restaurant recherchez-vous ?</h4>
+        <small>* Filtrez les résultats entre 1 et 5 étoiles</small> <br/>
+          <select id="filter-min">
+            <option value> nombre d'étoiles minimum</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+          <select id="filter-max">
+            <option value> nombre d'étoiles maximum</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+          <button class="filterButton btn btn-secondary" type="button">FILTRER</button>
+        </div>
+        <!--filtre end-->
+
+        <!--liste restaurants start-->
+        <div id="restaurants"></div>
+        <!--liste restaurants end-->
+
+        <!--Ajout restaurants start-->
+        <div class="addResto">
+          <h4>Ajoutez un restaurant</h4>
+          <div class="addRestoHidden">
+            <label for="name">Nom du restaurant</label>
+            <input type="text" id="nameResto" name="name">
+            <p></p>
+            <label for="address">Adresse du restaurant</label>
+            <input type="text" id="addressResto" name="address">
+            <p></p>
+            <label for="phone">Téléphone du restaurant</label>
+            <input type="number" id="phoneResto" name="phone">
+            <p></p>
+            <label for="email">Email du restaurant</label>
+            <input type="text" id="emailResto" name="email">
+            <p></p>
+            <label for="website">Site Web du restaurant</label>
+            <input type="text" id="websiteResto" name="website">
+            <p></p>
+            <label for="rating">Note du restaurant</label>
+            <input type="number" id="ratingResto" name="rating" min="1" max="5">
+            <p>* Cliquez à l'emplacement du restaurant pour l'ajouter sur la carte</p>
+          </div>
+          <button id="buttonAddResto" class="myButton btn btn-secondary btn-lg btn-block" type="button">Ajouter un restaurant</button>
+        </div>
+      </div>
+      <!--Ajout restaurants end-->
+
+      <!--Google map start-->
+      <div class="col-6-sm">
+        <div id="map"></div>
+      </div>
+      <!--Google map end-->
+    </div>
+  </div>
+    <!--Javascript start-->
+<script type="text/javascript" src="js/jQuery.js"></script>
+<script type="text/javascript" src="js/ajax.js"></script>
+<script type="text/javascript" src="js/map.js"></script>
+<script type="text/javascript" src="js/restaurant.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCA5arXTDsp5lB6iANmio2i9EER5jo6msM&callback=initMap"></script>
+    <!--Javascript end-->
+
 </body>
 </html>
