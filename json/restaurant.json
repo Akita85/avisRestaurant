@@ -1,5 +1,6 @@
 
-{"restaurants":[
+{ 
+   "restaurants": [
    {
       "restaurantName":"Bronco",
       "address":"39 Rue des Petites Écuries, 75010 Paris",
@@ -31,7 +32,7 @@
             "comment":"J'ai trouvé ça correct, sans plus"
          }
       ]
-   }
+   },
 
    {
       "restaurantName":"Bella Pizza",
@@ -48,7 +49,7 @@
             "comment":"Tout simplement mon restaurant préféré !"
          }
       ]
-   }
+   },
 
    {
       "restaurantName":"Wei Wang",
