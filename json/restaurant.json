@@ -1,5 +1,5 @@
 
-[
+{"restaurants":[
    {
       "restaurantName":"Bronco",
       "address":"39 Rue des Petites Écuries, 75010 Paris",
@@ -49,4 +49,22 @@
          }
       ]
    }
+
+   {
+      "restaurantName":"Wei Wang",
+      "address":"19 Place Saint-Exupery, 78955 Carrières-sous-Poissy",
+      "lat":48.949036,
+      "long":2.037017,
+      "ratings":[
+         {
+            "stars":4,
+            "comment":"Un excellent restaurant, j'y reviendrai ! Par contre il vaut mieux aimer la viande."
+         },
+         {
+            "stars":5,
+            "comment":"Tout simplement mon restaurant préféré !"
+         }
+      ]
+   }
 ]
+}
