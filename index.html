@@ -8,7 +8,10 @@
 	<link rel="icon" href="img/logoHGM.png" type="image/png">
   
   	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+
+
   <!-- Custom styles for Album template -->
   	<link rel="stylesheet" href="style.css">
 </head>
@@ -23,7 +26,7 @@
       <!--bannière logo end-->
 
     <div class="row">
-    <div class="col-6-sm listeResto">
+      <div class="col-6-lg listeResto">
         <!--filtre start-->
         <div class="filter">
           <h4>Quel type de restaurant recherchez-vous ?</h4>
@@ -52,49 +55,53 @@
 
         <!--liste restaurants start-->
         <div id="restaurants"></div>
-        <!--liste restaurants end-->
 
-        <!--Ajout restaurants start-->
-        <div class="addResto">
-          <h4>Ajoutez un restaurant</h4>
-          <div class="addRestoHidden">
-            <label for="name">Nom du restaurant</label>
-            <input type="text" id="nameResto" name="name">
-            <p></p>
-            <label for="address">Adresse du restaurant</label>
-            <input type="text" id="addressResto" name="address">
-            <p></p>
-            <label for="phone">Téléphone du restaurant</label>
-            <input type="number" id="phoneResto" name="phone">
-            <p></p>
-            <label for="email">Email du restaurant</label>
-            <input type="text" id="emailResto" name="email">
-            <p></p>
-            <label for="website">Site Web du restaurant</label>
-            <input type="text" id="websiteResto" name="website">
-            <p></p>
-            <label for="rating">Note du restaurant</label>
-            <input type="number" id="ratingResto" name="rating" min="1" max="5">
-            <p>* Cliquez à l'emplacement du restaurant pour l'ajouter sur la carte</p>
-          </div>
-          <button id="buttonAddResto" class="myButton btn btn-secondary btn-lg btn-block" type="button">Ajouter un restaurant</button>
-        </div>
+                <hr/>
+
+            <!-- Side Modal Top Right -->            
+            <div class="modal fade right" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            
+            <div class="modal-dialog" role="document">
+
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title w-100" id="myModalLabel">Modal title</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>                  
+                </div>
+                <img id="myModalImg" src="" 
+                  alt="Photo">
+                <div class="modal-body" id="myModalBody">
+                  ...
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-dark" data-dismiss="modal">Fermer</button>                  
+                </div>
+              </div>
+            </div>
+            </div>
+            <!-- Side Modal Top Right -->
+
       </div>
-      <!--Ajout restaurants end-->
+      <!--liste restaurants end-->
 
       <!--Google map start-->
-      <div class="col-6-sm">
+      <div class="col-6-lg">
         <div id="map"></div>
       </div>
       <!--Google map end-->
     </div>
   </div>
     <!--Javascript start-->
-<script type="text/javascript" src="js/jQuery.js"></script>
-<script type="text/javascript" src="js/ajax.js"></script>
-<script type="text/javascript" src="js/map.js"></script>
-<script type="text/javascript" src="js/restaurant.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCA5arXTDsp5lB6iANmio2i9EER5jo6msM&callback=initMap"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!--<script type="text/javascript" src="js/jQuery.js"></script>-->
+    <script type="text/javascript" src="js/map.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCA5arXTDsp5lB6iANmio2i9EER5jo6msM&libraries=places&callback=initMap"></script>
+    <script type="text/javascript" src="js/restaurant.js"></script>
     <!--Javascript end-->
 
 </body>
