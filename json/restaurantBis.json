@@ -1,0 +1,66 @@
+[
+   {
+      "restaurantName":"Bronco",
+      "address":"39 Rue des Petites Écuries, 75010 Paris",
+      "lat":48.8737815,
+      "long":2.3501649,
+      "ratings":[
+         {
+            "stars":4,
+            "comment":"Un excellent restaurant, j'y reviendrai ! Par contre il vaut mieux aimer la viande."
+         },
+         {
+            "stars":5,
+            "comment":"Tout simplement mon restaurant préféré !"
+         }
+      ]
+   },
+   {
+      "restaurantName":"Babalou",
+      "address":"4 Rue Lamarck, 75018 Paris",
+      "lat":48.8865035,
+      "long":2.3442197,
+      "ratings":[
+         {
+            "stars":5,
+            "comment":"Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+         },
+         {
+            "stars":3,
+            "comment":"J'ai trouvé ça correct, sans plus"
+         }
+      ]
+   },
+
+   {
+      "restaurantName":"Bella Pizza",
+      "address":"70 Rue Claude Monet, 78955 Carrières-sous-Poissy",
+      "lat":48.948708,
+      "long":2.036763,
+      "ratings":[
+         {
+            "stars":3,
+            "comment":"Un restaurant moyen ! Et il vaut mieux aimer la viande."
+         },
+         {
+            "stars":2,
+            "comment":"infecte. Nous ne reviendrons pas"
+         }
+      ]
+   },
+
+   {
+      "restaurantName":"Wei Wang",
+      "address":"19 Place Saint-Exupery, 78955 Carrières-sous-Poissy",
+      "lat":48.949036,
+      "long":2.037017,
+      "ratings":[
+         {
+            "stars":5,
+            "comment":"Excellent restaurant, à refaire."
+         },
+         {
+            "stars":5,
+            "comment":"5 étoiles ce n'est pas suffisant ! Il mérite davantage"
+         }
+      ]

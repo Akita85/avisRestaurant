@@ -185,7 +185,8 @@ function infoRestaurants(restaurant)
     myModalLabel.appendChild(myPara2);
     myModalLabel.appendChild(myPara);
 
-    let url = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location="+location+"&key=AIzaSyCA5arXTDsp5lB6iANmio2i9EER5jo6msM";
+    let url = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location="+location+"&key=APIKEY";
+
     ajaxGet(url,function() 
     {
     document.getElementById("myModalImg").src = url;    
@@ -268,4 +269,6 @@ function checkAvgRateRestaurant(restaurant)
     } else  {        
         hideRestaurant(restaurant);
             }
+}
+  }
 }
