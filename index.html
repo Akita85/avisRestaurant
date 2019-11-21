@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Have a Good Meal</title>
 	<link rel="icon" href="img/logoHGM.png" type="image/png">
-  
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
@@ -18,49 +18,33 @@
 
 <body>
 	<div class="container">
-    <!--bannière logo start-->
+
+      <!--bannière logo start-->
       <div class="header text-center">
         <img class="logo" src="img/logoHGM.png" alt="Have a Good Meal logo" width="10%">
         <h1> <span class="motTitreVert">Have a</span> <span class="motTitreOrange">Good</span> <span class="motTitreVert">Meal</span></h1>
       </div>
       <!--bannière logo end-->
 
+      <!--filtre slider start-->
     <div class="row">
       <div class="col-6-lg listeResto">
-        <!--filtre start-->
-        <div class="filter">
-          <h4>Quel type de restaurant recherchez-vous ?</h4>
-        <small>* Filtrez les résultats entre 1 et 5 étoiles</small> <br/>
-          <select id="filter-min">
-            <option value> nombre d'étoiles minimum</option>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          <select id="filter-max">
-            <option value> nombre d'étoiles maximum</option>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          <button class="filterButton btn btn-secondary" type="button">FILTRER</button>
-        </div>
-        <!--filtre end-->
-        <hr/>
+        <h3>Filtrez les restaurants par note</h3>
+        <p>
+          <label for="ratingRange">Notes :</label>
+          <input type="text" id="ratingRange" readonly style="border:0; color:#f6931f; font-weight:bold;"/>
+        </p>
+        <div id="slider-range"></div>
 
+        <hr/>
+      <!--filtre slider end-->
 
         <!--liste restaurants start-->
         <div id="restaurants"></div>
 
         <hr/>
 
-            <!-- Side Modal Top Right -->            
+            <!-- Side Modal start-->            
             <div class="modal fade right" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
             aria-hidden="true">
             
@@ -69,6 +53,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 class="modal-title w-100" id="myModalLabel">Modal title</h4>
+                  <button type="button" class="btn btn-info">Donner un avis</button>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>                  
@@ -79,12 +64,11 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-dark" data-dismiss="modal">Fermer</button>
-                  <button type="button" class="btn btn-info">Donner un avis</button>
                 </div>
               </div>
             </div>
             </div>
-            <!-- Side Modal Top Right -->
+            <!-- Side Modal end -->
 
       </div>
       <!--liste restaurants end-->
@@ -98,13 +82,17 @@
   </div>
     <!--Javascript start-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
     <!--<script type="text/javascript" src="js/jQuery.js"></script>-->
     <script type="text/javascript" src="js/ajax.js"></script>
     <script type="text/javascript" src="js/map.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=APIKEY&libraries=places&callback=initMap"></script>
     <script type="text/javascript" src="js/restaurant.js"></script>
+
     <!--Javascript end-->
 
 </body>

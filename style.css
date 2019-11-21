@@ -3,9 +3,9 @@
 
 body
 {
-		font-family:"Lato",sans-serif;
-		color : #696969;
-		font-size: 15px;
+	font-family:"Lato",sans-serif;
+	color : #696969;
+	font-size: 15px;
 }
 
 h1
@@ -28,13 +28,7 @@ h4
 
 h5
 {
-	cursor: pointer;
 	text-transform: uppercase;
-}
-
-h5:hover
-{
-	color : #FBCC7C;
 }
 
 h6
@@ -43,10 +37,19 @@ h6
 	font-size: 25px;
 }
 
+article
+{
+	padding-top: 10px;
+	padding-left: 10px;
+	margin-top: 10px;
+	cursor: pointer;
+}
+
 article:hover
 {
 	border: 1px solid grey;
-	box-shadow: 1px 1px 1px 1px grey;
+	box-shadow: 2px 2px 2px 2px grey;
+	border-radius: 5px;
 }
 
 p
@@ -137,12 +140,22 @@ p
 	margin-bottom: 15px;
 }
 
+.ui-slider-range 
+{ 
+	background: #B8DCCC;
+}
+
+.ui-slider-handle
+{
+	border-color: #FBCC7C; 
+}
+
 /* Set the size of the div element that contains the map */
 #map 
 {
- height: 500px;
- width: 500px; 
- margin-top: 20px;
+ 	height: 500px;
+ 	width: 500px; 
+ 	margin-top: 20px;
 }
 
 .motTitreVert{

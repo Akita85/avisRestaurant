@@ -3,10 +3,11 @@ let map, infoWindow;
 function initMap() 
 {
     map = new google.maps.Map(document.getElementById('map'), 
-    {center: {lat: 48.862725, lng: 2.287592}, zoom: 15});
+    // centre par défaut, si l'utilisateur n'autorise pas la géolocalisation
+    {center: {lat: 48.862725, lng: 2.287592}, zoom: 15}); 
     infoWindow = new google.maps.InfoWindow();
 
-    // Try HTML5 geolocation.
+    //HTML5 geolocalisation.
     if (navigator.geolocation) 
     {
         navigator.geolocation.getCurrentPosition(function(position)
@@ -17,6 +18,7 @@ function initMap()
               lng: position.coords.longitude
             };
             
+            // marqueur spécifique pour la position de l'utilisateur
             let image = 'http://maps.google.com/mapfiles/kml/paddle/orange-circle.png';
             let marker = new google.maps.Marker(
                 {
@@ -29,6 +31,12 @@ function initMap()
 
             marker.setMap(map);
             map.setCenter(pos);
+
+            /*appel évènement pour récupérer 
+            les limites de la carte et afficher uniquement les restaurants circonscripts dans cette limite.*/
+            google.maps.event.addListener(map, 'bounds_changed', RestaurantInLimiteMap);
+
+
         }, function() 
             {
                 handleLocationError(true, infoWindow, map.getCenter());
@@ -36,9 +44,7 @@ function initMap()
     } else {
           // Browser doesn't support Geolocation
           handleLocationError(false, infoWindow, map.getCenter());
-    } 
-
-
+    }
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) 
