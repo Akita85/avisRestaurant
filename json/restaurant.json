@@ -38,7 +38,7 @@
 
    {
       "restaurantName":"Bella Pizza",
-      "restaurantId":"Bella Pizza",
+      "restaurantId":"BellaPizza",
       "address":"70 Rue Claude Monet, 78955 Carrières-sous-Poissy",
       "lat":48.948708,
       "long":2.036763,
@@ -56,7 +56,7 @@
 
    {
       "restaurantName":"Wei Wang",
-      "restaurantId":"Wei Wang",
+      "restaurantId":"WeiWang",
       "address":"19 Place Saint-Exupery, 78955 Carrières-sous-Poissy",
       "lat":48.949036,
       "long":2.037017,
