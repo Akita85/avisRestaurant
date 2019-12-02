@@ -17,24 +17,34 @@
 </head>
 
 <body>
-	<div class="container">
+	<div class="container-fluid">
 
       <!--bannière logo start-->
       <div class="header text-center">
-        <img class="logo" src="img/logoHGM.png" alt="Have a Good Meal logo" width="10%">
-        <h1> <span class="motTitreVert">Have a</span> <span class="motTitreOrange">Good</span> <span class="motTitreVert">Meal</span></h1>
+        <img class="logo" src="img/logoHGM.png" alt="Have a Good Meal logo" width="5%">
+        <h1> <span class="motTitreVert">HAVE A</span> <span class="motTitreOrange">GOOD</span> <span class="motTitreVert">MEAL</span></h1>
       </div>
       <!--bannière logo end-->
 
       <!--filtre slider start-->
     <div class="row">
-      <div class="col-6-lg listeResto">
+      <div class="col-6-sm listeResto">
         <h3>Filtrez les restaurants par note</h3>
         <p>
           <label for="ratingRange">Notes :</label>
           <input type="text" id="ratingRange" readonly style="border:0; color:#f6931f; font-weight:bold;"/>
         </p>
         <div id="slider-range"></div>
+        <div>
+        <button type="button" class="myButton"> <a id="btn_ajout_restau" class="waves-effect waves-light btn text-align-center">
+            <i class="fas fa-plus"> </i>
+            AJOUTEZ UN RESTAURANT
+          </a></button>
+        </div>
+          <form id="form_Addrestau" style="display: none; margin-top: 10px; margin-bottom: 10px;" class="text-center">
+          <input id="ipt_name_restau" type="text" placeholder="Nom du restaurant" required>
+          <br/><small> * Indiquez le nom du restaurant à ajouter <br/> puis cliquez sur la carte pour définir son emplacement</small>
+        </form>
 
         <hr/>
       <!--filtre slider end-->
@@ -49,11 +59,10 @@
             aria-hidden="true">
             
             <div class="modal-dialog" role="document">
-
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 class="modal-title w-100" id="myModalLabel">Modal title</h4>
-                  <button type="button" class="btn btn-info">Donner un avis</button>
+                  <button type="button" class="btn btn-info" id="addRating">Donner un avis</button>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>                  
@@ -70,13 +79,30 @@
             </div>
             <!-- Side Modal end -->
 
+            <!-- Side Modal start-->            
+            <div class="modal fade right" id="myModalAddRating" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            
+            <div class="modal-dialog modal-dialogue-right" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title w-100" id="myModalLabelAddRating">Modal title</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>                  
+                </div>
+                <div class="modal-body" id="myModalBodyAddRating">
+                </div>
+              </div>
+            </div>
+            </div>
+            <!-- Side Modal end -->
+
       </div>
       <!--liste restaurants end-->
 
       <!--Google map start-->
-      <div class="col-6-lg">
         <div id="map"></div>
-      </div>
       <!--Google map end-->
     </div>
   </div>
