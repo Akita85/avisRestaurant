@@ -6,6 +6,7 @@ body
 	font-family:"Lato",sans-serif;
 	color : #696969;
 	font-size: 15px;
+	overflow: fixed;
 }
 
 h1
@@ -89,7 +90,7 @@ p
     color: #FBCC7C; 
 }
 
-.myButton, .filterButton
+.myButton
 {
 	color: white;
 	background-color: #FBCC7C;
@@ -101,9 +102,10 @@ p
 .myButton
 {
 	margin-top: 15px;
+	margin-left: 50px;
 }
 
-.myButton:hover, .filterButton:hover
+.myButton:hover
 {
 	background-color: #FBCC7C;
  	border-color: #FBCC7C;
@@ -117,8 +119,8 @@ p
 
 .listeResto
 {
-	margin-left: 15px;
- 	margin-right: 30px;
+	margin-left: 20px;
+ 	margin-right: 20px;
 }
 
 .filter
@@ -153,9 +155,11 @@ p
 /* Set the size of the div element that contains the map */
 #map 
 {
- 	height: 500px;
- 	width: 500px; 
- 	margin-top: 20px;
+ 	height: 700px;
+ 	width: 1100px; 
+ 	border : solid #FBCC7C;
+ 	margin : auto;
+ 	padding : auto;
 }
 
 .motTitreVert{
@@ -164,4 +168,18 @@ p
 
 .motTitreOrange{
 	color: #FBCC7C;
+}
+
+/* Important part */
+.modal-dialog{
+    overflow-y: initial !important;
+}
+.modal-body{
+    height: 250px;
+    overflow-y: auto;
+}
+
+textarea, input
+{
+	margin-top: 5px;
 }
