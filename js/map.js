@@ -1,4 +1,5 @@
-let map, infoWindow;
+
+    let map, infoWindow;
 
 function initMap() 
 {

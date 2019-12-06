@@ -2,11 +2,10 @@ const restaurantID = document.getElementById('restaurants');
 const totalStars = 5;
 let minRating = 0;
 let maxRating = 5;
-let restaurantList = new Array();
 let markers = [];
 let marker;
-// BoolÃ©en d'ajout de restaurant
-let boolAddRestau = false;
+// Booléen d'ajout de restaurant
+let addRestau = false;
 
 // ici j'appelle mon fichier JSON (Ajax)
 const requestULR = 'https://raw.githubusercontent.com/Akita85/avisRestaurant/master/json/restaurant.json';
@@ -20,16 +19,19 @@ pour que cela fonctionne et que cela récupère les infos du fichier JSON.*/
 request.onload = function() 
 {
   const restaurants = request.response;
-  console.log("restaurants");
-  console.log(restaurants);
-  restaurantList.push(restaurants);
-  google.maps.event.addListener(map, 'bounds_changed', function() {
+  //console.log(restaurants);
+  listRestaurantsHTML();
+  
+  google.maps.event.addListener(map, "center_changed", function(){
+          updateNearbyrestaurant();
+  });
+
+  google.maps.event.addListener(map, 'bounds_changed', function(){
       checkRestaurant();
   });
-  google.maps.event.addListener (map, 'rightclick', function (e) {
+  google.maps.event.addListener (map, 'rightclick', function(e){
         placeMarkerAndPanTo (e.latLng, map); 
     });
-  listRestaurantsHTML();
 
    //fonction qui gère mon filtre par moyenne (Avis)
   $(function() {
@@ -44,6 +46,7 @@ request.onload = function()
         $("#ratingRange").val(ui.values[0] + " - " + ui.values[1]);
         minRating = ui.values[0];      
         maxRating = ui.values[1];
+
         restaurantID.innerHTML = "";
         listRestaurantsHTML();
         checkRestaurant();
@@ -95,8 +98,13 @@ function affichageListRestaurant(restaurant)
   /*partie que je vais devoir factorisé car je l'utilise pratiquement 2 fois dans mon code, 
   sauf que l'un concerne la création d'un article et l'autre d'un modal*/
   let myArticle = document.createElement('article');
-  myArticle.id = restaurant.restaurantName;
+  myArticle.id = restaurant.restaurantId;
   myArticle.id = myArticle.id.replace(/ /g,"");
+  /*myArticle.id = myArticle.id.replace("(","");
+  myArticle.id = myArticle.id.replace(")","");
+  myArticle.id = myArticle.id.replace("'","");
+  myArticle.id = myArticle.id.replace(".","");*/
+
   let ArticleId = myArticle.id;
   let myH5 = document.createElement('h5');
   let myPara2 = document.createElement('p');
@@ -111,7 +119,7 @@ function affichageListRestaurant(restaurant)
   myH5.textContent = restaurant.restaurantName;
   myPara2.textContent = averRatingToShow + '  ';
 
-  myPara1.textContent = 'Adresse: ' + restaurant.address;
+  myPara1.innerHTML = 'Adresse: ' + restaurant.address + '<hr/>';
             
   myPara2.appendChild(divStarsOuter);
   divStarsOuter.appendChild(divStarsInner);
@@ -121,7 +129,7 @@ function affichageListRestaurant(restaurant)
   restaurantID.appendChild(myArticle);    
 
   //grâce à cet évènement, je peux accéder aux informations d'un restaurant
-  myArticle.addEventListener('click', function(e)
+  myArticle.addEventListener('click', ()=>
     {
       infoRestaurants(restaurant);   
     }); 
@@ -137,21 +145,22 @@ function checkRestaurant()
         let averRating = calculateAverageRatingRestaurant(restaurant);
         let coordRestaurant = { lat: restaurant.lat, lng: restaurant.long };
         let articleId = $('#'+restaurant['restaurantId']);
+        //console.log(articleId);
         if ((bounds.contains(coordRestaurant)) && (averRating >= minRating) && (averRating <= maxRating)){
             articleId.show();
             addNewMarker(coordRestaurant, restaurant);
             articleId.on('mouseover', function(){
-              for (var i = 0; i < markers.length; i++) {
+              for (let i = 0; i < markers.length; i++) {
                 markers[i].setAnimation(null);
                 if(articleId.find('h5').html() == markers[i].title){
                   toggleBounce(markers[i]);
                 }
               }
             });
-            console.log(restaurant['restaurantName'] + ' est dans la zone');
+            //console.log(restaurant['restaurantName'] + ' est dans la zone');
         } else {
             articleId.hide();
-            console.log(restaurant['restaurantName'] + ' est hors limite');
+            //console.log(restaurant['restaurantName'] + ' est hors limite');
         }
     }
 }
@@ -202,7 +211,7 @@ function infoRestaurants(restaurant)
     myModalLabel.appendChild(myPara2);
     myModalLabel.appendChild(myPara);
 
-    let url = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location="+location+"&key=AIzaSyCA5arXTDsp5lB6iANmio2i9EER5jo6msM";
+    let url = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location="+location+"&key=APIKEY";
     ajaxGet(url,function() 
     {
     document.getElementById("myModalImg").src = url;    
@@ -213,14 +222,8 @@ function infoRestaurants(restaurant)
     let totalStar = 5;
     let nbStars = ratings.stars;
     let percentageStars = Math.round((nbStars/totalStar)*100);
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    let yyyy = today.getFullYear();
-    today = dd + '/' + mm + '/' + yyyy;
     let myList = document.createElement('ul');
     let listItem = document.createElement('li');
-    let myPara1 = document.createElement('p');
     let myPara2 = document.createElement('p');
     let myPara3 = document.createElement('p');
     let divStarsOuter2 = document.createElement('div');
@@ -229,13 +232,11 @@ function infoRestaurants(restaurant)
     divStarsInner2.className = 'stars-inner';
     divStarsInner2.style.width = `${percentageStars}%`;
 
-    myPara1.textContent = 'commentaire du ' + today;
     myPara2.textContent = nbStars + '  ';
     myPara3.innerHTML = ratings.comment + '<hr/>';
 
     myPara2.appendChild(divStarsOuter2);
     divStarsOuter2.appendChild(divStarsInner2);
-    listItem.appendChild(myPara1);
     listItem.appendChild(myPara2);
     listItem.appendChild(myPara3);
     myList.appendChild(listItem);
@@ -247,8 +248,7 @@ function infoRestaurants(restaurant)
     })
 }
 
-/*Ajout des marqueurs pour chaque restaurant 
-- il me reste à gérer l'affichage de ces derniers en fonction des filtres (moyenne Avis)*/
+/*Ajout des marqueurs pour chaque restaurant*/
 function addNewMarker(LatLng, restaurant) 
 {     let image = 'img/markerResto.png';
       marker= new google.maps.Marker
@@ -259,12 +259,11 @@ function addNewMarker(LatLng, restaurant)
         title: restaurant.restaurantName,
       });
       markers.push(marker);
-      console.log(markers);
+      //console.log(marker.title);
   }
 
-// Sets the map on all markers in the array.
 function setMapOnAll(map) {
-  for (var i = 0; i < markers.length; i++) {
+  for (let i = 0; i < markers.length; i++) {
     markers[i].setMap(map);
   }
 }
@@ -363,8 +362,8 @@ function addRatingAndComment(restaurant)
   myModalBodyAddRating.appendChild(formElt);
 }
 
-// Ã‰vÃ¨ment au clic sur le bouton d'ajout de restaurant
-    btn_ajout_restau.addEventListener("click", function(e){
+// Evènement au clic sur le bouton d'ajout de restaurant
+    btn_ajout_restau.addEventListener("click", function() {
         // Reset du formulaire
         form_Addrestau.reset();
         // On dÃ©roule le formulaire
@@ -372,22 +371,25 @@ function addRatingAndComment(restaurant)
         // Focus sur le champ de nom
         document.querySelector("#form_Addrestau input").focus();
         // On passe en mode d'ajout de restaurant : variable globale
-        boolAddRestau = true;
+        addRestau = true;
     });
 
 function placeMarkerAndPanTo (latLng, map) {
 const restos = request.response['restaurants'];
-    // On vÃ©rifie qu'on est en mode ajout de restaurant, check de la variable globale
-        if (boolAddRestau === true){
+    // On vérifie qu'on est en mode ajout de restaurant, check de la variable globale
+        if (addRestau === true){
             // On vÃ©rifie que les champs nom et type sont remplis
             if (ipt_name_restau.value){
                 // Location
+
                 let lat = latLng.lat();
                 let lng = latLng.lng();
-                console.log("lat : " + lat + ", lng : " + lng);
+                //console.log("lat : " + lat + ", lng : " + lng);
                 let newCoordonnées = { lat: lat, lng: lng };
                 let geocoder = new google.maps.Geocoder;
                 geocodeLatLng(geocoder, newCoordonnées);
+                                          //console.log(ipt_name_restau.value);
+
             }
             else{
                 // On affiche le message d'erreur
@@ -398,7 +400,7 @@ const restos = request.response['restaurants'];
         // On referme le formulaire
         $(form_Addrestau).slideToggle();
         // On enlÃ¨ve le mode ajout de restaurant
-        boolAddRestau = false;
+        addRestau = false;
         }   
       }
 
@@ -410,7 +412,7 @@ function geocodeLatLng(geocoder, latLng) {
       if (results[0]) {                
         lat = results[0].geometry.location.lat(); 
         lng = results[0].geometry.location.lng();
-
+          
         let addNewRestaurant = {};
         let newRatings = [];
         let addressGeocode = results[0].formatted_address;
@@ -422,8 +424,8 @@ function geocodeLatLng(geocoder, latLng) {
         addNewRestaurant.long = lng;
         addNewRestaurant.ratings = newRatings;
 
-        restos.push(addNewRestaurant);
-
+        restos.unshift(addNewRestaurant);
+        //console.log(addNewRestaurant);
         map.panTo (latLng);
         restaurantID.innerHTML = "";
         listRestaurantsHTML();
@@ -437,3 +439,80 @@ function geocodeLatLng(geocoder, latLng) {
   }); 
 }
 
+function updateNearbyrestaurant()
+{
+  let center = map.getCenter();
+  let lat = center.lat();
+  let lng = center.lng();
+  let location = { lat: lat, lng: lng };
+  // Request : find restaurant around location
+  let service;
+  let request = {
+    location: location,
+    radius: '800',
+    type: ['restaurant']
+  };
+    restaurantID.innerHTML = "";
+  service = new google.maps.places.PlacesService(map);  
+  service.nearbySearch(request, addRestaurant);
+}
+
+function addRestaurant(results, status)
+{
+  const restos = request.response['restaurants'];
+  if (status == google.maps.places.PlacesServiceStatus.OK) 
+  {
+    for (let i = 0; i < results.length; i++) 
+    {
+      let addRestaurantPlace = {};
+      let newRatingsPlaces = [];
+      addRestaurantPlace.restaurantName = results[i].name;
+      addRestaurantPlace.restaurantId = results[i].place_id;
+      //console.log(addRestaurantPlace.restaurantId); 
+      addRestaurantPlace.address = results[i].vicinity;
+      addRestaurantPlace.lat = results[i].geometry.location.lat();
+      addRestaurantPlace.long = results[i].geometry.location.lng();  
+      addRestaurantPlace.ratings = newRatingsPlaces;      
+      // Request : Recovery of rewiews and ratings
+      let request = 
+      {
+        placeId: results[i].place_id,
+        fields: ['reviews']
+      };      
+        
+      let service = new google.maps.places.PlacesService(map);
+      service.getDetails(request, function(place, status) 
+      {
+        if (status === google.maps.places.PlacesServiceStatus.OK) 
+        {
+          // add condition on reviews
+          if (place.reviews){
+          // On boucle sur les avis
+          for (let review of place.reviews)
+          {
+           let view = {};
+            view.stars = review.rating;
+            view.comment = review.text;
+            newRatingsPlaces.push(view);
+          };
+          let restauInList = false;
+          restos.forEach(function(restaurant) {
+            if(addRestaurantPlace.restaurantId==restaurant.restaurantId){
+              restauInList = true;
+              console.log(restauInList);
+            }
+          }); 
+          if(restauInList == false) {
+        restos.push(addRestaurantPlace);
+        console.log(restos);
+        console.log(addRestaurantPlace);
+          };
+      }
+      restaurantID.innerHTML = "";
+      listRestaurantsHTML();
+      checkRestaurant();
+    }
+  });
+}
+}
+}

@@ -152,7 +152,16 @@ p
 	border-color: #FBCC7C; 
 }
 
-/* Set the size of the div element that contains the map */
+#restaurants
+{
+	margin-top: 15px;
+	margin-bottom: 5px;
+	padding: auto;
+	height: 500px;
+	width : 100%;
+	overflow:auto; 
+}
+
 #map 
 {
  	height: 700px;
