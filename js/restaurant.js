@@ -46,7 +46,6 @@ request.onload = function()
         $("#ratingRange").val(ui.values[0] + " - " + ui.values[1]);
         minRating = ui.values[0];      
         maxRating = ui.values[1];
-
         restaurantID.innerHTML = "";
         listRestaurantsHTML();
         checkRestaurant();
@@ -199,7 +198,6 @@ function infoRestaurants(restaurant)
     let divStarsInner = document.createElement('div');
     divStarsInner.className = 'stars-inner';
     divStarsInner.style.width = `${starPercentage}%`;
-
 
     myH6.textContent = restaurant.restaurantName ;
     myPara.textContent = 'Adresse : ' + restaurant.address;
@@ -452,7 +450,6 @@ function updateNearbyrestaurant()
     radius: '800',
     type: ['restaurant']
   };
-    restaurantID.innerHTML = "";
   service = new google.maps.places.PlacesService(map);  
   service.nearbySearch(request, addRestaurant);
 }
@@ -499,13 +496,10 @@ function addRestaurant(results, status)
           restos.forEach(function(restaurant) {
             if(addRestaurantPlace.restaurantId==restaurant.restaurantId){
               restauInList = true;
-              console.log(restauInList);
             }
           }); 
           if(restauInList == false) {
         restos.push(addRestaurantPlace);
-        console.log(restos);
-        console.log(addRestaurantPlace);
           };
       }
       restaurantID.innerHTML = "";

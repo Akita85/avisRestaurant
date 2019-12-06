@@ -8,8 +8,6 @@ function initMap()
     {center: {lat: 48.862725, lng: 2.287592}, zoom: 15}); 
     infoWindow = new google.maps.InfoWindow();
 
-    
-
     //HTML5 geolocalisation.
     if (navigator.geolocation) 
     {
@@ -49,7 +47,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos)
 {
     infoWindow.setPosition(pos);
     infoWindow.setContent(browserHasGeolocation ?
-                                'Error: The Geolocation service failed.' :
+                                'Vous êtes centré sur Paris par défaut' :
                                 'Error: Your browser doesn\'t support geolocation.');
     infoWindow.open(map);
 }
