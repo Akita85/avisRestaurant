@@ -4,7 +4,6 @@ let minRating = 0;
 let maxRating = 5;
 let markers = [];
 let marker;
-// Booléen d'ajout de restaurant
 let addRestau = false;
 
 // ici j'appelle mon fichier JSON (Ajax)
@@ -23,26 +22,28 @@ request.onload = function()
   listRestaurantsHTML();
   
   google.maps.event.addListener(map, "center_changed", function(){
-          updateNearbyrestaurant();
+      updateNearbyrestaurant();
   });
-
   google.maps.event.addListener(map, 'bounds_changed', function(){
       checkRestaurant();
   });
   google.maps.event.addListener (map, 'rightclick', function(e){
-        placeMarkerAndPanTo (e.latLng, map); 
-    });
+      placeMarkerAndPanTo (e.latLng, map); 
+  });
 
    //fonction qui gère mon filtre par moyenne (Avis)
-  $(function() {
+  $(function()
+  {
     // Init jQuery UI slider range
-    $("#slider-range").slider({
+    $("#slider-range").slider(
+    {
       range: true,
       min: 0,
       max: 5,
       step: 0.5,
       values: [0, 5],
-      slide: function(event, ui) {
+      slide: function(event, ui) 
+      {
         $("#ratingRange").val(ui.values[0] + " - " + ui.values[1]);
         minRating = ui.values[0];      
         maxRating = ui.values[1];
@@ -51,11 +52,7 @@ request.onload = function()
         checkRestaurant();
       }
     });
-    $("#ratingRange").val(
-      $("#slider-range").slider("values", 0) +
-        " - " +
-        $("#slider-range").slider("values", 1)
-    );
+    $("#ratingRange").val($("#slider-range").slider("values", 0)+" - " +$("#slider-range").slider("values", 1));
   });
 }
 
@@ -86,6 +83,7 @@ const restos = request.response['restaurants'];
 let restaurant;
   restos.forEach((restaurant)=> {
     affichageListRestaurant(restaurant);
+    console.log(restaurant);
     })
 }
 
@@ -94,8 +92,6 @@ function affichageListRestaurant(restaurant)
   let averRatingToShow = calculateAverageRatingRestaurant(restaurant);
   let starPercentage = Math.round((averRatingToShow/totalStars)*100);
 
-  /*partie que je vais devoir factorisé car je l'utilise pratiquement 2 fois dans mon code, 
-  sauf que l'un concerne la création d'un article et l'autre d'un modal*/
   let myArticle = document.createElement('article');
   myArticle.id = restaurant.restaurantId;
   myArticle.id = myArticle.id.replace(/ /g,"");
@@ -138,13 +134,15 @@ function checkRestaurant()
 {
     let bounds = map.getBounds();
     const restos = request.response['restaurants'];
+    //console.log(restos);
     clearMarkers();
     for (i in restos) {
         restaurant = restos[i];
+        //console.log(restaurant);
+
         let averRating = calculateAverageRatingRestaurant(restaurant);
         let coordRestaurant = { lat: restaurant.lat, lng: restaurant.long };
-        let articleId = $('#'+restaurant['restaurantId']);
-        //console.log(articleId);
+        let articleId = $('#'+restaurant['restaurantId']); 
         if ((bounds.contains(coordRestaurant)) && (averRating >= minRating) && (averRating <= maxRating)){
             articleId.show();
             addNewMarker(coordRestaurant, restaurant);
@@ -258,6 +256,9 @@ function addNewMarker(LatLng, restaurant)
       });
       markers.push(marker);
       //console.log(marker.title);
+      marker.addListener("click", function() {
+      infoRestaurants(restaurant);   
+});
   }
 
 function setMapOnAll(map) {
@@ -384,10 +385,10 @@ const restos = request.response['restaurants'];
                 let lng = latLng.lng();
                 //console.log("lat : " + lat + ", lng : " + lng);
                 let newCoordonnées = { lat: lat, lng: lng };
+                //console.log(newCoordonnées);
                 let geocoder = new google.maps.Geocoder;
                 geocodeLatLng(geocoder, newCoordonnées);
                                           //console.log(ipt_name_restau.value);
-
             }
             else{
                 // On affiche le message d'erreur
@@ -421,9 +422,10 @@ function geocodeLatLng(geocoder, latLng) {
         addNewRestaurant.lat = lat;
         addNewRestaurant.long = lng;
         addNewRestaurant.ratings = newRatings;
+        //console.log(addNewRestaurant);
 
         restos.unshift(addNewRestaurant);
-        //console.log(addNewRestaurant);
+        //console.log(restos);
         map.panTo (latLng);
         restaurantID.innerHTML = "";
         listRestaurantsHTML();
@@ -440,9 +442,10 @@ function geocodeLatLng(geocoder, latLng) {
 function updateNearbyrestaurant()
 {
   let center = map.getCenter();
+  //console.log(center);
   let lat = center.lat();
   let lng = center.lng();
-  let location = { lat: lat, lng: lng };
+  let location = { lat: lat, lng: lng }; 
   // Request : find restaurant around location
   let service;
   let request = {
@@ -465,11 +468,12 @@ function addRestaurant(results, status)
       let newRatingsPlaces = [];
       addRestaurantPlace.restaurantName = results[i].name;
       addRestaurantPlace.restaurantId = results[i].place_id;
-      //console.log(addRestaurantPlace.restaurantId); 
       addRestaurantPlace.address = results[i].vicinity;
       addRestaurantPlace.lat = results[i].geometry.location.lat();
       addRestaurantPlace.long = results[i].geometry.location.lng();  
-      addRestaurantPlace.ratings = newRatingsPlaces;      
+      addRestaurantPlace.ratings = newRatingsPlaces; 
+      //console.log(addRestaurantPlace); 
+    
       // Request : Recovery of rewiews and ratings
       let request = 
       {
@@ -500,6 +504,7 @@ function addRestaurant(results, status)
           }); 
           if(restauInList == false) {
         restos.push(addRestaurantPlace);
+        //console.log(restos);
           };
       }
       restaurantID.innerHTML = "";

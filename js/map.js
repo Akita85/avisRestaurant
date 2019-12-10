@@ -1,6 +1,6 @@
 
     let map, infoWindow;
-
+    
 function initMap() 
 {
     map = new google.maps.Map(document.getElementById('map'), 
@@ -42,6 +42,7 @@ function initMap()
           handleLocationError(false, infoWindow, map.getCenter());
     }
 }
+
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) 
 {
