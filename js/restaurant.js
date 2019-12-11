@@ -3,6 +3,7 @@ const totalStars = 5;
 let minRating = 0;
 let maxRating = 5;
 let markers = [];
+let listRestos = [];
 let marker;
 let addRestau = false;
 
@@ -14,13 +15,12 @@ request.responseType = 'json';
 request.send();
 
 /* Je récupère les réponses, et j'appelle mes fonctions majeures dans request.onload 
-pour que cela fonctionne et que cela récupère les infos du fichier JSON.*/
+pour que cela fonctionne et que cela récupère les infos JSON.*/
 request.onload = function() 
 {
   const restaurants = request.response;
-  //console.log(restaurants);
+  creatArray();
   listRestaurantsHTML();
-  
   google.maps.event.addListener(map, "center_changed", function(){
       updateNearbyrestaurant();
   });
@@ -56,6 +56,33 @@ request.onload = function()
   });
 }
 
+function creatArray ()
+{
+  const restos = request.response['restaurants'];
+  console.log(restos);
+  for (let i = 0; i < restos.length; i++) 
+    {
+  let addRestaurant = {};
+  let newRatings = [];
+  addRestaurant.restaurantName = restos[i].restaurantName;
+  addRestaurant.restaurantId = restos[i].restaurantId;
+  addRestaurant.address = restos[i].address;
+  addRestaurant.lat = restos[i].lat;
+  addRestaurant.long = restos[i].long; 
+  addRestaurant.ratings = newRatings;  
+
+  for (let ratings of restos[i].ratings)
+          {
+           let rating = {};
+            rating.stars = ratings.stars;
+            rating.comment = ratings.comment;
+            newRatings.push(rating);
+          };
+  listRestos.push(addRestaurant);
+  console.log(listRestos);
+}
+}
+
 //fonction me permettant de calculer la moyenne des avis des restaurants.
 function calculateAverageRatingRestaurant(restaurant)
 {
@@ -75,15 +102,13 @@ function calculateAverageRatingRestaurant(restaurant)
  return roundedAverageRating;
 }
 
-/* fonction me permettant d'afficher chacun de mes restaurants présents sur le fichier JSON
+/* fonction me permettant d'afficher chacun de mes restaurants
 dans la liste à gauche de la carte.*/
 function listRestaurantsHTML() 
 {
-const restos = request.response['restaurants'];
-let restaurant;
-  restos.forEach((restaurant)=> {
+  let restaurant;
+  listRestos.forEach((restaurant)=> {
     affichageListRestaurant(restaurant);
-    console.log(restaurant);
     })
 }
 
@@ -95,11 +120,6 @@ function affichageListRestaurant(restaurant)
   let myArticle = document.createElement('article');
   myArticle.id = restaurant.restaurantId;
   myArticle.id = myArticle.id.replace(/ /g,"");
-  /*myArticle.id = myArticle.id.replace("(","");
-  myArticle.id = myArticle.id.replace(")","");
-  myArticle.id = myArticle.id.replace("'","");
-  myArticle.id = myArticle.id.replace(".","");*/
-
   let ArticleId = myArticle.id;
   let myH5 = document.createElement('h5');
   let myPara2 = document.createElement('p');
@@ -133,13 +153,9 @@ function affichageListRestaurant(restaurant)
 function checkRestaurant()
 {
     let bounds = map.getBounds();
-    const restos = request.response['restaurants'];
-    //console.log(restos);
     clearMarkers();
-    for (i in restos) {
-        restaurant = restos[i];
-        //console.log(restaurant);
-
+    for (i in listRestos) {
+        restaurant = listRestos[i];
         let averRating = calculateAverageRatingRestaurant(restaurant);
         let coordRestaurant = { lat: restaurant.lat, lng: restaurant.long };
         let articleId = $('#'+restaurant['restaurantId']); 
@@ -154,10 +170,8 @@ function checkRestaurant()
                 }
               }
             });
-            //console.log(restaurant['restaurantName'] + ' est dans la zone');
         } else {
             articleId.hide();
-            //console.log(restaurant['restaurantName'] + ' est hors limite');
         }
     }
 }
@@ -207,7 +221,7 @@ function infoRestaurants(restaurant)
     myModalLabel.appendChild(myPara2);
     myModalLabel.appendChild(myPara);
 
-    let url = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location="+location+"&key=APIKEY";
+    let url = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location="+location+"&key=AIzaSyCA5arXTDsp5lB6iANmio2i9EER5jo6msM";
     ajaxGet(url,function() 
     {
     document.getElementById("myModalImg").src = url;    
@@ -255,7 +269,6 @@ function addNewMarker(LatLng, restaurant)
         title: restaurant.restaurantName,
       });
       markers.push(marker);
-      //console.log(marker.title);
       marker.addListener("click", function() {
       infoRestaurants(restaurant);   
 });
@@ -267,17 +280,17 @@ function setMapOnAll(map) {
   }
 }
 
-// Removes the markers from the map, but keeps them in the array.
+// Je retire les markers de la map, mais je les gardes dans le tableau.
 function clearMarkers() {
   setMapOnAll(null);
 }
 
-// Shows any markers currently in the array.
+// Afficher les markers
 function showMarkers() {
   setMapOnAll(map);
 }
 
-// Deletes all markers in the array by removing references to them.
+// Supprimer tous les markers du tableau.
 function deleteMarkers() {
   clearMarkers();
   markers = [];
@@ -312,7 +325,7 @@ function addRatingAndComment(restaurant)
   let selectElt = document.createElement("select");
   selectElt.id = "rating";
   selectElt.className = "browser-default custom-select";
-  // Required Option value
+  // Choix de la valeur/note obligatoire
   selectElt.required = true; 
   let optionDefaultElt = document.createElement("option");
   optionDefaultElt.value = "";
@@ -340,7 +353,6 @@ function addRatingAndComment(restaurant)
   inputElt.value = "Valider";
   inputElt.className = "btn btn-secondary";
   formElt.appendChild(inputElt);
-  // Display Form
   formElt.addEventListener("submit", function (e) {
     let rating = Number(formElt.elements.rating.value);
     let comment = formElt.elements.comment.value;
@@ -365,30 +377,24 @@ function addRatingAndComment(restaurant)
     btn_ajout_restau.addEventListener("click", function() {
         // Reset du formulaire
         form_Addrestau.reset();
-        // On dÃ©roule le formulaire
+        // On déroule le formulaire
         $(form_Addrestau).slideToggle();
         // Focus sur le champ de nom
         document.querySelector("#form_Addrestau input").focus();
-        // On passe en mode d'ajout de restaurant : variable globale
+        // On passe en mode d'ajout de restaurant
         addRestau = true;
     });
 
 function placeMarkerAndPanTo (latLng, map) {
-const restos = request.response['restaurants'];
-    // On vérifie qu'on est en mode ajout de restaurant, check de la variable globale
+    // On vérifie qu'on est en mode ajout de restaurant
         if (addRestau === true){
-            // On vÃ©rifie que les champs nom et type sont remplis
+            // On vérifie que les champs nom et type sont remplis
             if (ipt_name_restau.value){
-                // Location
-
                 let lat = latLng.lat();
                 let lng = latLng.lng();
-                //console.log("lat : " + lat + ", lng : " + lng);
                 let newCoordonnées = { lat: lat, lng: lng };
-                //console.log(newCoordonnées);
                 let geocoder = new google.maps.Geocoder;
                 geocodeLatLng(geocoder, newCoordonnées);
-                                          //console.log(ipt_name_restau.value);
             }
             else{
                 // On affiche le message d'erreur
@@ -398,7 +404,7 @@ const restos = request.response['restaurants'];
             }
         // On referme le formulaire
         $(form_Addrestau).slideToggle();
-        // On enlÃ¨ve le mode ajout de restaurant
+        // On enlève le mode ajout de restaurant
         addRestau = false;
         }   
       }
@@ -406,26 +412,20 @@ const restos = request.response['restaurants'];
 // Reverse Geocoding
 function geocodeLatLng(geocoder, latLng) {  
   geocoder.geocode({'location': latLng}, function(results, status) {
-    const restos = request.response['restaurants'];
     if (status === 'OK') {
       if (results[0]) {                
         lat = results[0].geometry.location.lat(); 
         lng = results[0].geometry.location.lng();
-          
         let addNewRestaurant = {};
         let newRatings = [];
         let addressGeocode = results[0].formatted_address;
-
         addNewRestaurant.restaurantName = ipt_name_restau.value;
         addNewRestaurant.restaurantId = ipt_name_restau.value.replace(/ /g,"");
         addNewRestaurant.address = addressGeocode;
         addNewRestaurant.lat = lat;
         addNewRestaurant.long = lng;
         addNewRestaurant.ratings = newRatings;
-        //console.log(addNewRestaurant);
-
-        restos.unshift(addNewRestaurant);
-        //console.log(restos);
+        listRestos.unshift(addNewRestaurant);
         map.panTo (latLng);
         restaurantID.innerHTML = "";
         listRestaurantsHTML();
@@ -442,11 +442,10 @@ function geocodeLatLng(geocoder, latLng) {
 function updateNearbyrestaurant()
 {
   let center = map.getCenter();
-  //console.log(center);
   let lat = center.lat();
   let lng = center.lng();
   let location = { lat: lat, lng: lng }; 
-  // Request : find restaurant around location
+  // demande : trouver les restaurants situés autour de la situation/location.
   let service;
   let request = {
     location: location,
@@ -459,7 +458,6 @@ function updateNearbyrestaurant()
 
 function addRestaurant(results, status)
 {
-  const restos = request.response['restaurants'];
   if (status == google.maps.places.PlacesServiceStatus.OK) 
   {
     for (let i = 0; i < results.length; i++) 
@@ -472,9 +470,8 @@ function addRestaurant(results, status)
       addRestaurantPlace.lat = results[i].geometry.location.lat();
       addRestaurantPlace.long = results[i].geometry.location.lng();  
       addRestaurantPlace.ratings = newRatingsPlaces; 
-      //console.log(addRestaurantPlace); 
-    
-      // Request : Recovery of rewiews and ratings
+      
+      // demande : envoyer les avis et commentaires de chaque restaurant
       let request = 
       {
         placeId: results[i].place_id,
@@ -486,7 +483,6 @@ function addRestaurant(results, status)
       {
         if (status === google.maps.places.PlacesServiceStatus.OK) 
         {
-          // add condition on reviews
           if (place.reviews){
           // On boucle sur les avis
           for (let review of place.reviews)
@@ -497,14 +493,14 @@ function addRestaurant(results, status)
             newRatingsPlaces.push(view);
           };
           let restauInList = false;
-          restos.forEach(function(restaurant) {
+          listRestos.forEach(function(restaurant) {
             if(addRestaurantPlace.restaurantId==restaurant.restaurantId){
               restauInList = true;
             }
           }); 
           if(restauInList == false) {
-        restos.push(addRestaurantPlace);
-        //console.log(restos);
+        listRestos.push(addRestaurantPlace);
+        console.log(listRestos);
           };
       }
       restaurantID.innerHTML = "";
