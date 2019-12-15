@@ -1,6 +1,5 @@
+let map, infoWindow;
 
-    let map, infoWindow;
-    
 function initMap() 
 {
     map = new google.maps.Map(document.getElementById('map'), 
@@ -8,10 +7,10 @@ function initMap()
     {center: {lat: 48.862725, lng: 2.287592}, zoom: 15}); 
     infoWindow = new google.maps.InfoWindow();
 
-    //HTML5 geolocalisation.
+    //HTML5 geolocalisation
     if (navigator.geolocation) 
     {
-        navigator.geolocation.getCurrentPosition(function(position)
+        navigator.geolocation.getCurrentPosition((position)=>
         {
             let pos = 
             {
@@ -43,7 +42,6 @@ function initMap()
     }
 }
 
-
 function handleLocationError(browserHasGeolocation, infoWindow, pos) 
 {
     infoWindow.setPosition(pos);
@@ -51,8 +49,6 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos)
                                 'Vous êtes centré sur Paris par défaut' :
                                 'Error: Your browser doesn\'t support geolocation.');
     infoWindow.open(map);
+    // On affiche les restaurants situés autour du centre par défaut
+    updateNearbyrestaurant();
 }
-
-
-
-

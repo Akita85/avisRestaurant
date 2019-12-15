@@ -171,19 +171,22 @@ p
  	padding : auto;
 }
 
-.motTitreVert{
+.motTitreVert
+{
 	color: #B8DCCC;
 }
 
-.motTitreOrange{
+.motTitreOrange
+{
 	color: #FBCC7C;
 }
 
-/* Important part */
-.modal-dialog{
+.modal-dialog
+{
     overflow-y: initial !important;
 }
-.modal-body{
+.modal-body
+{
     height: 250px;
     overflow-y: auto;
 }
