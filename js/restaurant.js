@@ -1,18 +1,10 @@
 // Je déclare mes principales variables
-const restaurantID = document.getElementById('restaurants');
-const myModalLabel = document.getElementById('myModalLabel');
-const myModalBody = document.getElementById('myModalBody');
-const myModalImg = document.getElementById("myModalImg");
-const addRating = document.getElementById("addRating");
-const myModalLabelAddRating = document.getElementById('myModalLabelAddRating');
-const myModalBodyAddRating = document.getElementById('myModalBodyAddRating');
 const totalStars = 5;
 let minRating = 0;
 let maxRating = 5;
 let markers = [];
 let listRestos = [];
 let addRestau = false;
-let newRatings = [];
 
 // ici j'appelle mon fichier JSON (Ajax)
 const requestULR = 'https://raw.githubusercontent.com/Akita85/avisRestaurant/master/json/restaurant.json';
@@ -64,7 +56,7 @@ request.onload = ()=>
 //Génère l'affichage des restaurants
 function displayRestaurants()
 {
-  restaurantID.innerHTML = "";
+  $("#restaurants").empty();
   listRestaurantsHTML();
   checkRestaurant();
 }
@@ -77,12 +69,12 @@ function infosInArray()
     addRestaurant.address = address;
     addRestaurant.lat = lat;
     addRestaurant.long = lng; 
-    addRestaurant.ratings = newRatings;
-    listRestos.push(addRestaurant);
+    addRestaurant.ratings = ratings;
+    listRestos.unshift(addRestaurant);
 }
 
 //J'envoie mes données JSON dans mon tableau JS listRestos
-function createArray ()
+function createArray()
 {
   const restos = request.response['restaurants'];
   for (let i = 0; i < restos.length; i++) 
@@ -93,6 +85,8 @@ function createArray ()
     address = resto.address;
     lat = resto.lat;
     lng = resto.long; 
+    let newRatings = [];
+    ratings = newRatings;
     infosInArray();
     for (let ratings of resto.ratings)
     {
@@ -145,15 +139,14 @@ function listRestaurantsHTML()
 function createRestaurantList(restaurant)
 {
   let myArticle = document.createElement('article');
-  myArticle.id = restaurant.restaurantId;
-  myArticle.id = myArticle.id.replace(/ /g,"");
+  myArticle.id = restaurant.restaurantId.replace(/ /g,"");
   contentAndElementHTML(restaurant, myArticle);
-  restaurantID.appendChild(myArticle);    
+  $("#restaurants").append(myArticle);    
   //grâce à cet évènement, je peux accéder aux informations d'un restaurant
   myArticle.addEventListener('click', ()=>
   {
     infoRestaurants(restaurant);   
-  }); 
+  });
 }
 
 function contentAndElementHTML(restaurant, ele)
@@ -213,15 +206,12 @@ function checkRestaurant()
 pour chaque restaurant lors du click du User*/
 function infoRestaurants(restaurant) 
 {
-  myModalLabel.innerHTML = ""; 
-  myModalImg.innerHTML = ""; 
-  myModalBody.innerHTML = "";
-    
-  let pos = { lat: restaurant.lat, lng: restaurant.long };
-  let location = pos.lat+","+ pos.lng;        
-
+  $("#myModalLabel, #myModalImg, #myModalBody").empty();      
   $("#myModal").modal('show');
   $('#myModal').modal('handleUpdate');
+
+  let pos = { lat: restaurant.lat, lng: restaurant.long };
+  let location = pos.lat+","+ pos.lng;  
 
   contentAndElementHTML(restaurant, myModalLabel);
 
@@ -243,7 +233,6 @@ function infoRestaurants(restaurant)
     divStarsInner2.style.width = `${percentageStars}%`;
     myPara2.textContent = nbStars + '  ';
     myPara3.innerHTML = ratings.comment + '<hr/>';
-
     myPara2.appendChild(divStarsOuter2);
     divStarsOuter2.appendChild(divStarsInner2);
     listItem.appendChild(myPara2);
@@ -251,7 +240,7 @@ function infoRestaurants(restaurant)
     myList.appendChild(listItem);
     myModalBody.appendChild(myList);
   })
-  addRating.addEventListener('click', ()=>
+  $("#addRating").on('click', ()=>
   {
     addRatingAndComment(restaurant);          
   })
@@ -315,9 +304,7 @@ function toggleBounce(ele)
 
 function addRatingAndComment(restaurant)
 { 
-  myModalLabelAddRating.innerHTML = ""; 
-  myModalBodyAddRating.innerHTML = "";
-
+  $("#myModalLabelAddRating, #myModalBodyAddRating").empty();
   $("#myModalAddRating").modal('show');
 
   myModalLabelAddRating.textContent = restaurant.restaurantName ;  
@@ -376,7 +363,7 @@ function addRatingAndComment(restaurant)
 
 // Evènement au clic sur le bouton d'ajout de restaurant
 btn_ajout_restau.addEventListener("click", ()=> 
-{
+{ 
   // Reset du formulaire
   form_Addrestau.reset();
   // On déroule le formulaire
@@ -388,10 +375,10 @@ btn_ajout_restau.addEventListener("click", ()=>
 });
 
 function placeMarkerAndPanTo (latLng, map) 
-{
+{ 
   // On vérifie qu'on est en mode ajout de restaurant
   if (addRestau === true)
-  {
+  { 
     // On vérifie que le champs nom est rempli
     if (ipt_name_restau.value)
     {
@@ -400,12 +387,12 @@ function placeMarkerAndPanTo (latLng, map)
       let newCoordonnées = { lat: lat, lng: lng };
       let geocoder = new google.maps.Geocoder;
       geocodeLatLng(geocoder, newCoordonnées);
-    } else {
+    } else { 
       // On affiche le message d'erreur
       $(err_msg).slideToggle();
       // On le masque au bout de 3 secondes
       setTimeout(()=>{$(err_msg).slideToggle();}, 3000);
-    }
+    } 
     // On referme le formulaire
     $(form_Addrestau).slideToggle();
     // On enlève le mode ajout de restaurant
@@ -425,7 +412,7 @@ function geocodeLatLng(geocoder, latLng)
         restaurantName = ipt_name_restau.value;
         restaurantId = ipt_name_restau.value.replace(/ /g,"");
         address = results[0].formatted_address;
-        newRatings = [];
+        ratings = [];
         infosInArray();
         map.panTo (latLng);
         displayRestaurants();
@@ -444,7 +431,7 @@ function updateNearbyrestaurant()
   let lat = center.lat();
   let lng = center.lng();
   let location = { lat: lat, lng: lng }; 
-  // demande : trouver les restaurants situés autour de la situation/location.
+  // demande : trouver les restaurants situés autour du centre de la map.
   let request = 
   {
     location: location,
@@ -493,17 +480,17 @@ function addRestaurant(results, status)
             };
           }
           let restauInList = false;
-          listRestos.forEach((restaurant)=> 
-          {
-            if(addRestaurantPlace.restaurantId==restaurant.restaurantId)
+            listRestos.forEach((restaurant)=> 
             {
-              restauInList = true;
-            }
-          }); 
-          if(restauInList == false) 
-          {
-            listRestos.push(addRestaurantPlace);
-          };
+              if(addRestaurantPlace.restaurantId==restaurant.restaurantId)
+              {
+                restauInList = true;
+              }
+            }); 
+            if(restauInList == false) 
+            {
+              listRestos.push(addRestaurantPlace);
+            };
           displayRestaurants();
         }
       });
