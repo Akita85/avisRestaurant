@@ -12,6 +12,7 @@ let maxRating = 5;
 let markers = [];
 let listRestos = [];
 let addRestau = false;
+let newRatings = [];
 
 // ici j'appelle mon fichier JSON (Ajax)
 const requestULR = 'https://raw.githubusercontent.com/Akita85/avisRestaurant/master/json/restaurant.json';
@@ -68,23 +69,15 @@ function displayRestaurants()
   checkRestaurant();
 }
 
-function infosInArray(restaurant)
+function infosInArray()
 {
     let addRestaurant = {};
-    let newRatings = [];
-    addRestaurant.restaurantName = restaurant.restaurantName;
-    addRestaurant.restaurantId = restaurant.restaurantId;
-    addRestaurant.address = restaurant.address;
-    addRestaurant.lat = restaurant.lat;
-    addRestaurant.long = restaurant.long; 
+    addRestaurant.restaurantName = restaurantName;
+    addRestaurant.restaurantId = restaurantId;
+    addRestaurant.address = address;
+    addRestaurant.lat = lat;
+    addRestaurant.long = lng; 
     addRestaurant.ratings = newRatings;
-    for (let ratings of restaurant.ratings)
-    {
-      let rating = {};
-      rating.stars = ratings.stars;
-      rating.comment = ratings.comment;
-      newRatings.push(rating);
-    };
     listRestos.push(addRestaurant);
 }
 
@@ -95,7 +88,19 @@ function createArray ()
   for (let i = 0; i < restos.length; i++) 
   {
     let resto = restos[i];
-    infosInArray(resto);
+    restaurantName = resto.restaurantName;
+    restaurantId = resto.restaurantId;
+    address = resto.address;
+    lat = resto.lat;
+    lng = resto.long; 
+    infosInArray();
+    for (let ratings of resto.ratings)
+    {
+      let rating = {};
+      rating.stars = ratings.stars;
+      rating.comment = ratings.comment;
+      newRatings.push(rating);
+    };
   }
 }
 
@@ -309,7 +314,7 @@ function toggleBounce(ele)
 }
 
 function addRatingAndComment(restaurant)
-{
+{ 
   myModalLabelAddRating.innerHTML = ""; 
   myModalBodyAddRating.innerHTML = "";
 
@@ -327,7 +332,6 @@ function addRatingAndComment(restaurant)
   let optionDefaultElt = document.createElement("option");
   optionDefaultElt.value = "";
   optionDefaultElt.textContent = "Notez le restaurant";
-  selectElt.appendChild(optionDefaultElt);
   // Options
   for (i=0; i<6; i++) 
   {
@@ -337,18 +341,19 @@ function addRatingAndComment(restaurant)
     selectElt.appendChild(optionElt);
   }
 
-  formElt.appendChild(selectElt);
   textAreaElt = document.createElement("textarea");
   textAreaElt.className = "md-textarea form-control";
   textAreaElt.id = "comment";
   textAreaElt.rows = 3;
   textAreaElt.cols = 30;
   textAreaElt.placeholder = "Votre commentaire ...";
-  formElt.appendChild(textAreaElt);
   let inputElt = document.createElement("input");
   inputElt.type = "submit";
   inputElt.value = "Valider";
   inputElt.className = "btn btn-secondary";
+  selectElt.appendChild(optionDefaultElt);
+  formElt.appendChild(selectElt);
+  formElt.appendChild(textAreaElt);
   formElt.appendChild(inputElt);
   formElt.addEventListener("submit", (e)=> 
   {
@@ -417,16 +422,11 @@ function geocodeLatLng(geocoder, latLng)
       if (results[0]) {                
         lat = results[0].geometry.location.lat(); 
         lng = results[0].geometry.location.lng();
-        let addNewRestaurant = {};
-        let newRatings = [];
-        let addressGeocode = results[0].formatted_address;
-        addNewRestaurant.restaurantName = ipt_name_restau.value;
-        addNewRestaurant.restaurantId = ipt_name_restau.value.replace(/ /g,"");
-        addNewRestaurant.address = addressGeocode;
-        addNewRestaurant.lat = lat;
-        addNewRestaurant.long = lng;
-        addNewRestaurant.ratings = newRatings;
-        listRestos.unshift(addNewRestaurant);
+        restaurantName = ipt_name_restau.value;
+        restaurantId = ipt_name_restau.value.replace(/ /g,"");
+        address = results[0].formatted_address;
+        newRatings = [];
+        infosInArray();
         map.panTo (latLng);
         displayRestaurants();
       } else {
@@ -445,7 +445,8 @@ function updateNearbyrestaurant()
   let lng = center.lng();
   let location = { lat: lat, lng: lng }; 
   // demande : trouver les restaurants situés autour de la situation/location.
-  let request = {
+  let request = 
+  {
     location: location,
     radius: '800',
     type: ['restaurant']
@@ -490,19 +491,19 @@ function addRestaurant(results, status)
               view.comment = review.text;
               newRatingsPlaces.push(view);
             };
-            let restauInList = false;
-            listRestos.forEach((restaurant)=> 
-            {
-              if(addRestaurantPlace.restaurantId==restaurant.restaurantId)
-              {
-                restauInList = true;
-              }
-            }); 
-            if(restauInList == false) 
-            {
-              listRestos.push(addRestaurantPlace);
-            };
           }
+          let restauInList = false;
+          listRestos.forEach((restaurant)=> 
+          {
+            if(addRestaurantPlace.restaurantId==restaurant.restaurantId)
+            {
+              restauInList = true;
+            }
+          }); 
+          if(restauInList == false) 
+          {
+            listRestos.push(addRestaurantPlace);
+          };
           displayRestaurants();
         }
       });
