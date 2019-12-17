@@ -215,7 +215,7 @@ function infoRestaurants(restaurant)
 
   contentAndElementHTML(restaurant, myModalLabel);
 
-  let url = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location="+location+"&key=AIzaSyCA5arXTDsp5lB6iANmio2i9EER5jo6msM";
+  let url = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location="+location+"&key=APIKEY";
   ajaxGet(url,()=>{ document.getElementById("myModalImg").src = url; })
 
   restaurant.ratings.forEach((ratings)=> 
