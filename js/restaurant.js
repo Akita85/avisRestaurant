@@ -61,16 +61,14 @@ function displayRestaurants()
   checkRestaurant();
 }
 
-function infosInArray()
+function infosInArray(ele)
 {
-    let addRestaurant = {};
-    addRestaurant.restaurantName = restaurantName;
-    addRestaurant.restaurantId = restaurantId;
-    addRestaurant.address = address;
-    addRestaurant.lat = lat;
-    addRestaurant.long = lng; 
-    addRestaurant.ratings = ratings;
-    listRestos.unshift(addRestaurant);
+  ele.restaurantName = restaurantName;
+  ele.restaurantId = restaurantId;
+  ele.address = address;
+  ele.lat = lat;
+  ele.long = lng; 
+  ele.ratings = ratings;
 }
 
 //J'envoie mes données JSON dans mon tableau JS listRestos
@@ -80,14 +78,16 @@ function createArray()
   for (let i = 0; i < restos.length; i++) 
   {
     let resto = restos[i];
+    let newRatings = [];
+    let addRestaurants = {};
     restaurantName = resto.restaurantName;
     restaurantId = resto.restaurantId;
     address = resto.address;
     lat = resto.lat;
     lng = resto.long; 
-    let newRatings = [];
     ratings = newRatings;
-    infosInArray();
+    infosInArray(addRestaurants);
+    listRestos.unshift(addRestaurants);
     for (let ratings of resto.ratings)
     {
       let rating = {};
@@ -215,7 +215,7 @@ function infoRestaurants(restaurant)
 
   contentAndElementHTML(restaurant, myModalLabel);
 
-  let url = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location="+location+"&key=APIKEY";
+  let url = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location="+location+"&key=AIzaSyCA5arXTDsp5lB6iANmio2i9EER5jo6msM";
   ajaxGet(url,()=>{ document.getElementById("myModalImg").src = url; })
 
   restaurant.ratings.forEach((ratings)=> 
@@ -319,6 +319,8 @@ function addRatingAndComment(restaurant)
   let optionDefaultElt = document.createElement("option");
   optionDefaultElt.value = "";
   optionDefaultElt.textContent = "Notez le restaurant";
+  selectElt.appendChild(optionDefaultElt);
+
   // Options
   for (i=0; i<6; i++) 
   {
@@ -338,7 +340,6 @@ function addRatingAndComment(restaurant)
   inputElt.type = "submit";
   inputElt.value = "Valider";
   inputElt.className = "btn btn-secondary";
-  selectElt.appendChild(optionDefaultElt);
   formElt.appendChild(selectElt);
   formElt.appendChild(textAreaElt);
   formElt.appendChild(inputElt);
@@ -406,14 +407,16 @@ function geocodeLatLng(geocoder, latLng)
   geocoder.geocode({'location': latLng}, (results, status)=> 
   {
     if (status === 'OK') {
-      if (results[0]) {                
+      if (results[0]) {  
+        let addRestaurant = {};
         lat = results[0].geometry.location.lat(); 
         lng = results[0].geometry.location.lng();
         restaurantName = ipt_name_restau.value;
         restaurantId = ipt_name_restau.value.replace(/ /g,"");
         address = results[0].formatted_address;
         ratings = [];
-        infosInArray();
+        infosInArray(addRestaurant);
+        listRestos.unshift(addRestaurant);
         map.panTo (latLng);
         displayRestaurants();
       } else {
@@ -448,15 +451,15 @@ function addRestaurant(results, status)
   {
     for (let i = 0; i < results.length; i++) 
     {
-      let addRestaurantPlace = {};
       let newRatingsPlaces = [];
-      addRestaurantPlace.restaurantName = results[i].name;
-      addRestaurantPlace.restaurantId = results[i].place_id;
-      addRestaurantPlace.address = results[i].vicinity;
-      addRestaurantPlace.lat = results[i].geometry.location.lat();
-      addRestaurantPlace.long = results[i].geometry.location.lng();  
-      addRestaurantPlace.ratings = newRatingsPlaces; 
-      
+      let addRestaurantPlace = {};
+      restaurantName = results[i].name;
+      restaurantId = results[i].place_id;
+      address = results[i].vicinity;
+      lat = results[i].geometry.location.lat();
+      lng = results[i].geometry.location.lng();  
+      ratings = newRatingsPlaces; 
+      infosInArray(addRestaurantPlace);
       // demande : envoyer les avis et commentaires de chaque restaurant
       let request = 
       {
