@@ -96,13 +96,9 @@ p
 	background-color: #FBCC7C;
  	border-color: #FBCC7C;
  	border-radius: 5px;
- 	cursor: pointer;
-}
-
-.myButton
-{
-	margin-top: 15px;
-	margin-left: 50px;
+	cursor: pointer;
+	display: block;
+  	margin : auto;
 }
 
 .myButton:hover
@@ -123,11 +119,6 @@ p
  	margin-right: 20px;
 }
 
-.filter
-{
-	margin-top: 20px;
-}
-
 #myModalImg
 {
 	display: block;
@@ -142,14 +133,13 @@ p
 	margin-bottom: 15px;
 }
 
+#slider-range
+{
+	margin-bottom: 15px;
+}
 .ui-slider-range 
 { 
 	background: #B8DCCC;
-}
-
-.ui-slider-handle
-{
-	border-color: #FBCC7C; 
 }
 
 #restaurants
@@ -169,6 +159,56 @@ p
  	border : solid #FBCC7C;
  	margin : auto;
  	padding : auto;
+}
+
+@media (max-width: 1600px) 
+{ 
+	#map{
+		 height: 700px;
+		 width: 700px; 
+	} 
+}
+
+@media (max-width: 1200px) 
+{ 
+	#map 
+	{
+		 height: 650px;
+		 width: 500px; 
+	} 
+}
+
+@media (min-width: 700px) and (max-width: 900px) 
+{ 
+	#map 
+	{
+		 height: 500px;
+		 width: 400px; 
+	} 
+
+	.listeResto	
+	{
+		width : 40%;
+		display: block;
+		margin: auto;
+	}
+
+}
+
+@media (min-width: 300px) and (max-width: 736px) 
+{ 
+	.logo {
+		width: 15%;
+	}
+
+	h1{
+		font-size: 25px;
+	}
+
+	h3{
+		font-size: 18px;
+	}
+
 }
 
 .motTitreVert
